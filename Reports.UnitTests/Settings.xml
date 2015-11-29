@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Settings>
+	<ReportServer Path="http://win-bqugakuf90e/ReportServer_SQL2008/" Mode="Native" UserName="@UserName" UserPassword="@UserPassword" HttpClientCredentialType="Windows">
+		<Folder Name="AdventureWorks Sample Reports">
+			<Report Name="Sales Order Detail SQL2008R2">
+				<Params>
+					<Param Name="SalesOrderNumber" Value="SO46623" />
+				</Params>
+				<TestCases>
+					<TestCase Assert="IsNotNull" Path="//Detail[@LineNumber='1']/@UnitPrice" />
+					<TestCase Assert="IsNotNull" Path="//Detail[@LineNumber='2']/@Quantity" />
+				</TestCases>
+			</Report>
+			<Report Name="Sales Order Detail SQL2008R2" RenderFormat="PDF" RenderPath="C:\Temp\test.pdf">
+				<Params>
+					<Param Name="SalesOrderNumber" Value="SO50750" />
+				</Params>
+				<!--There is no test cases for this report but rendering, which is test as well-->
+			</Report>
+			<Report Name="Product Line Sales SQL2008R2">
+				<Params>
+					<Param Name="ProductCategory" Value="1" />
+					<Param Name="ProductSubcategory" Value="1" />
+					<Param Name="ProductSubcategory" Value="2" />
+					<Param Name="ProductSubcategory" Value="3" />
+					<Param Name="StartDate" Value="2008/01/31" />
+					<Param Name="EndDate" Value="2008/03/01" />
+				</Params>
+				<TestCases>
+					<TestCase Assert="AreEqual" Path="//TopEmployeesTable_Group1[@FullName='Mensa-Annan, Tete']/@SaleAmountEmp" Value="1824013.4580"/>
+					<TestCase Assert="AreEqual" Path="//TopEmployeesTable_Group1[@FullName='Mensa-Annan, Tete']/@SaleAmountEmp">
+						<DrillDownReport Name="Employee Sales Summary SQL2008R2" Path="//SalesComparison_OrderYear[@Label='2008']//SalesComparison_OrderMonth[@Label='February']/@DataValue0">
+							<Params>
+								<Param Name="ReportMonth" Value="2" />
+								<Param Name="ReportYear" Value="2008" />
+								<Param Name="EmpID" Value="284" />
+							</Params>
+						</DrillDownReport>
+					</TestCase>
+				</TestCases>
+				<LinkedReports>
+					<LinkedReport Path="/AdventureWorks Sample Reports/Linked Reports/Bike Sales 2007" Description="Shows Product Line Report data with predefined parameters">
+						<Params>
+							<Param Name="ErrorParameterWithValue MustBeSkiped" DefaultValues="???" />
+							<Param Name="ErrorParameterWithoutValue MustBeSkiped" DefaultValues="" />
+							
+							<Param Name="StartDate" DefaultValues="2007/01/31"  Hide="True"/>
+							<Param Name="EndDate" DefaultValues="2007/03/01"  Hide="True"/>
+							<Param Name="ProductCategory" DefaultValues="1" />
+							<Param Name="ProductSubcategory" DefaultValues="1,2,3" />
+						</Params>
+					</LinkedReport>
+				</LinkedReports>
+			</Report>
+		</Folder>
+	</ReportServer>
+</Settings>
